@@ -1,0 +1,30 @@
+# -*- coding: utf-8 -*-
+"""
+Created on Wed Jun 10 22:53:57 2020
+
+@author: tyler
+"""
+
+import random
+class random_choice():
+    x = random.choice(range(1,10))
+    print("Guess a number between 1 and 10")
+    print(x)
+    g = float(input("Guess: "))
+    while g in range(1,10):
+        if g > x:
+            print("too high")
+            pass
+        elif g < x:
+            print("too low")
+            pass
+        elif g == x:
+            print("nice job")
+            break
+        g = float(input("Guess: "))
+    
+
+
+        
+
+
