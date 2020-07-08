@@ -1,0 +1,171 @@
+# -*- coding: utf-8 -*-
+"""
+Created on Mon Jun  8 20:52:54 2020
+
+@author: tyler
+"""
+import random
+
+all_cards = [ "Ace", 2, 3, 4, 5, 6, 7, 8, 9, "Jack", "Queen", "King"]
+suit = ["Spades", "Clubs", "Hearts", "Diamonds"]
+
+def phase1():
+    global your_face1, your_face2, first_card, second_card, dealers_face1, dealers_first
+    
+    your_face1 = random.choice(all_cards)
+    first_card = str(your_face1) + " of " + random.choice(suit)
+        
+        
+    your_face2 = random.choice(all_cards)
+    second_card = str(your_face2) + " of " + random.choice(suit)
+    while second_card == first_card:
+        your_face2 = random.choice(all_cards)
+        second_card = str(your_face2) + " of " + random.choice(suit)
+    print("Your have the " + first_card + " and the " + second_card)
+
+    dealers_face1 = random.choice(all_cards)
+    dealers_first = str(dealers_face1) + " of " + random.choice(suit)
+    while dealers_first == first_card:
+            dealers_first = str(random.choice(all_cards)) + " of " + random.choice(suit)
+    print("The dealer\'s card is " + dealers_first)
+
+def phase2():
+    """calculating players total points"""
+    points1 = your_face1
+    points2 = your_face2
+    if your_face1 == "Jack":
+        points1 = 10
+    if your_face1 == "King":
+        points1 = 10
+    if your_face1 == "Queen":
+        points1 = 10
+    if your_face1 == "Ace":
+        points1 = 11
+     
+    if your_face2 == "Jack":
+        points2 = 10
+    if your_face2 == "King":
+        points2 = 10
+    if your_face2 == "Queen":
+        points2 = 10
+    if your_face2 == "Ace":
+        points2 = 11
+        if points1 == 11:
+            points2 = 1
+    total_points = int(points1) + int(points2)
+    hit_points = 0 # i have to set this out side the look so it doesn't keep reseting to 0
+    while input("\nYou have " + str(total_points) + " points, would you like to \'hit\' or \'stay\'?: ") == "hit":
+        hit_fcard = random.choice(all_cards)
+        hit_card = str(hit_fcard) + " of " + random.choice(suit)
+        while hit_card == first_card or hit_card == second_card or hit_card == dealers_first:
+            hit_fcard = random.choice(all_cards)
+            hit_card = str(hit_fcard) + " of " + random.choice(suit)
+        print(hit_card)
+        points = hit_fcard
+        if hit_fcard == "Jack":
+            points = 10
+        if hit_fcard == "King":
+            points = 10
+        if hit_fcard == "Queen":
+            points = 10
+        if hit_fcard == "Ace":
+            points = 11
+            if total_points > 11:
+                points = 1
+        
+        hit_points += points
+        if total_points + hit_points > 21 and points1 == 11:
+            points1 = 1
+        if total_points + hit_points > 21 and points2 == 11:
+            points1 = 1
+        total_points = int(points1) + int(points2) + int(hit_points)
+        if total_points > 21:
+            print("Oof maybe you should have stayed, you have " + str(total_points) + " points now.")
+            break
+        
+    """Now to start the dealers round"""
+    
+    dealers_face2 = random.choice(all_cards)
+    dealers_second = str(dealers_face2) + " of " + random.choice(suit)
+    while dealers_second == first_card or dealers_second == second_card or dealers_second == first_card:
+        dealers_face2 = random.choice(all_cards)
+        dealers_second = str(dealers_face2) + " of " + random.choice(suit)
+    print("\nThe dealer\'s hand is:\n"+ dealers_first + " and " + dealers_second)
+
+    dpoints1 = dealers_face1
+    dpoints2 = dealers_face2
+
+    if dealers_face1 == "Jack":
+        dpoints1 = 10
+    if dealers_face1 == "King":
+        dpoints1 = 10
+    if dealers_face1 == "Queen":
+        dpoints1 = 10
+    if dealers_face1 == "Ace":
+        dpoints1 = 11
+        
+    if dealers_face2 == "Jack":
+        dpoints2 = 10
+    if dealers_face2 == "King":
+        dpoints2 = 10
+    if dealers_face2 == "Queen":
+        dpoints2 = 10
+    if dealers_face2 == "Ace":
+        dpoints2 = 11
+        if dpoints1 == 11:
+            dpoints2 = 1
+    dpoints_total = int(dpoints1) + int(dpoints2)
+    
+    dhit_points = 0
+    while dpoints_total < 17:
+        if total_points > 21 or dpoints_total > total_points:
+            print("the dealer has " + str(dpoints_total) + " points, and you just lost.")
+            break
+        
+        print("The dealer will hit\n")
+        dhit_fcard = random.choice(all_cards)
+        dhit_card = str(dhit_fcard) + " of " + random.choice(suit)
+        while dhit_card == first_card or dhit_card == second_card or dhit_card == dealers_first or dhit_card == dealers_second:
+                dhit_fcard = random.choice(all_cards)
+                dhit_card = str(dhit_fcard) + " of " + random.choice(suit)
+        print(dhit_card)
+        dpoints = dhit_fcard
+        if dhit_fcard == "Jack":
+            dpoints = 10
+        if dhit_fcard == "King":
+            dpoints = 10
+        if dhit_fcard == "Queen":
+            dpoints = 10
+        if dhit_fcard == "Ace":
+            dpoints = 11
+            if dpoints_total > 12:
+                dpoints = 1
+        dhit_points += dpoints
+        if dpoints_total + dhit_points > 21 and dpoints1 == 11:
+            dpoints1 = 1
+        if dpoints_total + dhit_points > 21 and dpoints2 == 11:
+            dpoints2 = 1
+        dpoints_total = int(dpoints1) + int(dpoints2) + int(dhit_points)
+        
+        
+    print("\nthe dealer will stay.  You have " + str(total_points) + " points and the dealer has " + str(dpoints_total) + " points")   
+    if dpoints_total < 22 and total_points > 21:
+        print("the dealer has won!")
+    elif dpoints_total > 21 and total_points < 22:
+        print("You have won!")
+    elif dpoints_total > total_points:
+        print("the dealer has won!")
+    elif dpoints_total < total_points:
+        print("You have won!")
+    else:
+        print("It is a draw")
+
+
+
+phase1()
+phase2()
+
+
+
+
+
